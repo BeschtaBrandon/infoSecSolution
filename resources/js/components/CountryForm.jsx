@@ -8,13 +8,21 @@ export default function CountryForm() {
   const token = document.querySelector('meta[name="csrf-token"]').content;
 
   useEffect(() => {
+    fetch('countryByName',{
+      method: 'GET',
+      mode: 'cors',
+      headers:{
+        "Content-Type": "application/json; charset=utf-8",
+        "X-CSRF-TOKEN": token
+      },
+    });
   }, []);
 
   return (
     <div>
       <form className="form-inline">
         <div className="form-group mb-3">
-          <input type="text" className="form-control" />
+          <input type="text" className="form-control" name="countryName"/>
         </div>
         <button type="submit" className="btn btn-info mb-3">Search</button>
       </form>

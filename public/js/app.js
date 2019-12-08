@@ -59719,14 +59719,24 @@ function CountryForm() {
       setCountries = _useState2[1];
 
   var token = document.querySelector('meta[name="csrf-token"]').content;
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {}, []);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    fetch('countryByName', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "X-CSRF-TOKEN": token
+      }
+    });
+  }, []);
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
     className: "form-inline"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group mb-3"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "text",
-    className: "form-control"
+    className: "form-control",
+    name: "countryName"
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     type: "submit",
     className: "btn btn-info mb-3"

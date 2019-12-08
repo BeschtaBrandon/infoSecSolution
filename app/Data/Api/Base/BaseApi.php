@@ -24,6 +24,19 @@ abstract class BaseApi {
    */
   protected $logger;
 
+
+  /**
+   * Post a JSON request
+   *
+   * @param $method
+   * @param array $params
+   * @param array $headers
+   * @return mixed
+   */
+  protected function postRequest($method, $params = [], $headers = []) {
+    return $this->bodyToJson($this->postRequestRaw($method, $params, $headers));
+  }
+
   /**
    * Get a request
    *
@@ -74,6 +87,23 @@ abstract class BaseApi {
       'verify'          => false,
       'cookies'         => false
     ]);
+  }
+
+  /**
+   * Post a JSON request and get the raw response
+   *
+   * @param $method
+   * @param array $params
+   * @param array $headers
+   * @return \Psr\Http\Message\ResponseInterface
+   */
+  protected function postRequestRaw($method, $params = [], $headers = []) {
+    $response = $this->getClient()->request('post', $method, [
+      'json' => $params,
+      'headers' => $headers,
+    ]);
+
+    return $response;
   }
 
   /**
