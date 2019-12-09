@@ -1,4 +1,26 @@
 // Application Styling
 .container {
   margin-top: 15px;
+
+  .form-inline {
+    .lead {
+      margin-left: 10px;
+    }
+  }
+
+  .card {
+    margin: 10px 0px 10px 10px;
+    .row {
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .card-columns {
+    .card {
+      img {
+        height: 275px;
+      }
+    }
+  }
 }

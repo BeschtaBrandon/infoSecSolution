@@ -59597,13 +59597,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
@@ -59623,8 +59625,22 @@ function (_PureComponent) {
     _classCallCheck(this, Application);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Application).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_this), "setCountries", function (data) {
+      _this.setState({
+        initCountries: data
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleTextChange", function (e) {
+      _this.setState({
+        searchText: e.target.value
+      });
+    });
+
     _this.state = {
-      initCountries: new immutable__WEBPACK_IMPORTED_MODULE_2__["List"]()
+      initCountries: new immutable__WEBPACK_IMPORTED_MODULE_2__["List"](),
+      searchText: ''
     };
     return _this;
   }
@@ -59664,16 +59680,14 @@ function (_PureComponent) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row justify-content-center"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-8"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-header"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CountryForm__WEBPACK_IMPORTED_MODULE_4__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-body"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CountryList__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        className: "col-xs-12"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CountryForm__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        handleTextChange: this.handleTextChange,
+        searchText: this.state.searchText,
+        setCountries: this.setCountries
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CountryList__WEBPACK_IMPORTED_MODULE_3__["default"], {
         list: this.state.initCountries
-      }))))));
+      }))));
     }
   }]);
 
@@ -59701,46 +59715,85 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! immutable */ "./node_modules/immutable/dist/immutable.es.js");
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
-
-
-function CountryForm() {
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(new immutable__WEBPACK_IMPORTED_MODULE_1__["List"]()),
-      _useState2 = _slicedToArray(_useState, 2),
-      countries = _useState2[0],
-      setCountries = _useState2[1];
-
+function CountryForm(props) {
   var token = document.querySelector('meta[name="csrf-token"]').content;
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    fetch('countryByName', {
+    console.log("props", props); // fetch('countryByName',{
+    //   method: 'GET',
+    //   mode: 'cors',
+    //   headers:{
+    //     "Content-Type": "application/json; charset=utf-8",
+    //     "X-CSRF-TOKEN": token
+    //   },
+    // });
+  }, []);
+
+  var handleClick = function handleClick() {
+    fetch("countryByName/".concat(props.searchText), {
       method: 'GET',
       mode: 'cors',
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         "X-CSRF-TOKEN": token
       }
+    }).then(function (res) {
+      return res.json();
+    }).then(function (data) {
+      props.setCountries(Object(immutable__WEBPACK_IMPORTED_MODULE_1__["fromJS"])(data));
+    }, // Note: it's important to handle errors here
+    // instead of a catch() block so that we don't swallow
+    // exceptions from actual bugs in components.
+    function (error) {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, error);
     });
-  }, []);
+  };
+
+  var handleReset = function handleReset() {
+    fetch('countries', {
+      method: 'GET',
+      credentials: 'omit',
+      mode: 'cors',
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "X-CSRF-TOKEN": token
+      }
+    }).then(function (res) {
+      return res.json();
+    }).then(function (data) {
+      props.setCountries(Object(immutable__WEBPACK_IMPORTED_MODULE_1__["fromJS"])(data));
+    }, // Note: it's important to handle errors here
+    // instead of a catch() block so that we don't swallow
+    // exceptions from actual bugs in components.
+    function (error) {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, error);
+    });
+  };
+
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
     className: "form-inline"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "lead"
+  }, "Search by country name:"), '     ', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group mb-3"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "text",
     className: "form-control",
-    name: "countryName"
+    name: "countryName",
+    value: props.searchText,
+    onChange: function onChange(e) {
+      return props.handleTextChange(e);
+    }
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    type: "submit",
-    className: "btn btn-info mb-3"
-  }, "Search")));
+    type: "button",
+    className: "btn btn-info mb-3",
+    onClick: handleClick
+  }, "Search"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    type: "button",
+    className: "btn btn-danger mb-3",
+    onClick: handleReset
+  }, "Clear")));
 }
 
 /***/ }),
@@ -59757,20 +59810,44 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CountryList; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! immutable */ "./node_modules/immutable/dist/immutable.es.js");
-
-
 
 function CountryList(props) {
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {}, []);
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
-    className: "list-group"
-  }, props.list.map(function (ele) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-      key: ele.get('alpha3Code'),
-      className: "list-group-item"
-    }, ele.get('name'));
-  })));
+  return (// add className='card-columns'
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, props.list.size ? props.list.map(function (ele) {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card",
+        key: ele.get('alpha3Code')
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-6"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        className: "card-img",
+        src: ele.get('flag'),
+        alt: "Country's Flag"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-6"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-body"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+        className: "card-title"
+      }, ele.get('name')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-info"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Alpha2code: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, ele.get('alpha2Code'))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Alpha3code: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, ele.get('alpha3Code'))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+        className: "list-unstyled"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Region: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, ele.get('region')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Sub region: ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, ele.get('subregion')))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+        className: "list-group"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+        className: "list-group-item"
+      }, "Languages"), ele.get('languages').map(function (language) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+          className: "list-group-item",
+          key: language.get('iso639_1')
+        }, language.get('name'));
+      })))))));
+    }) : null)
+  );
 }
 
 /***/ }),

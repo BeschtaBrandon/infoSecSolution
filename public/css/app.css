@@ -2,3 +2,22 @@
   margin-top: 15px;
 }
 
+.container .form-inline .lead {
+  margin-left: 10px;
+}
+
+.container .card {
+  margin: 10px 0px 10px 10px;
+}
+
+.container .card .row {
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
+}
+
+.container .card-columns .card img {
+  height: 275px;
+}
+

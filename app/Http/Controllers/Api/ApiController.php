@@ -34,14 +34,13 @@ class ApiController {
    *
    * @return \Illuminate\Http\JsonResponse
    */
-  public function searchCountries(Request $request) {
-    $name = $request->get('countryName');
-    $response = $this->apiClient->postCountrySearch('Belgium');
-    return response()->json($response);
-  }
+//  public function searchCountries($name) {
+//    $response = $this->apiClient->postCountrySearch($name);
+//    return response()->json($response);
+//  }
 
-  public function getCountryByName() {
-    $response = $this->apiClient->getCountryByName();
+  public function getCountryByName($name) {
+    $response = $this->apiClient->getCountryByName($name);
     return response()->json($response);
   }
 }

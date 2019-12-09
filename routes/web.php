@@ -14,5 +14,5 @@
 Route::get('/', 'HomeController@index');
 
 Route::get('countries', 'Api\ApiController@getCountries');
-Route::get('countryByName', 'Api\ApiController@getCountryByName');
+Route::get('countryByName/{name}', 'Api\ApiController@getCountryByName');
 

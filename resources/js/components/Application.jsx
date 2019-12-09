@@ -12,9 +12,9 @@ export default class Application extends PureComponent {
     super(props);
     this.state = {
       initCountries: new List(),
+      searchText: '',
     }
   }
-
 
   componentDidMount() {
     const token = document.querySelector('meta[name="csrf-token"]').content;
@@ -43,19 +43,29 @@ export default class Application extends PureComponent {
       )
   }
 
+  setCountries = (data) => {
+    this.setState({
+      initCountries: data
+    });
+  }
+
+  handleTextChange = e => {
+    this.setState({
+      searchText: e.target.value
+    });
+  }
+
   render() {
         return (
             <div className="container">
                 <div className="row justify-content-center">
-                    <div className="col-md-8">
-                        <div className="card">
-                            <div className="card-header">
-                              <CountryForm />
-                            </div>
-                            <div className="card-body">
-                              <CountryList list={this.state.initCountries}/>
-                            </div>
-                        </div>
+                    <div className="col-xs-12">
+                      <CountryForm
+                        handleTextChange={this.handleTextChange}
+                        searchText={this.state.searchText}
+                        setCountries={this.setCountries}
+                      />
+                      <CountryList list={this.state.initCountries} />
                     </div>
                 </div>
             </div>

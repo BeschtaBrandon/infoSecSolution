@@ -35,7 +35,7 @@ class CountryApi extends BaseApi {
   }
 
   public function getCountryByName($name = '') {
-    return $this->getRequest($this->api_base . 'name/Belgium');
+    return $this->getRequest($this->api_base . 'name/' . $name);
   }
 
 
