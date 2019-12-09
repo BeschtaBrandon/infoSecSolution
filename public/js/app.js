@@ -59821,7 +59821,7 @@ function CountryForm(props) {
     type: "button",
     className: "btn btn-danger mb-3",
     onClick: handleReset
-  }, "Clear")));
+  }, "Reset")));
 }
 
 /***/ }),
