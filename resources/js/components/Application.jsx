@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {fromJS, List} from 'immutable';
 import CountryList from './CountryList';
 import CountryForm from './CountryForm';
+import CountryCountAndRegion from './CountryCountAndRegion';
 import {fetchAPI} from "../helpers/api";
 
 export default class Application extends PureComponent {
@@ -13,6 +14,8 @@ export default class Application extends PureComponent {
     this.state = {
       initCountries: new List(),
       searchText: '',
+      count: this.props.countryCount,
+      regions: this.props.countryRegions,
     }
   }
 
@@ -45,7 +48,8 @@ export default class Application extends PureComponent {
 
   setCountries = (data) => {
     this.setState({
-      initCountries: data
+      initCountries: data,
+      count: data.size
     });
   }
 
@@ -66,6 +70,7 @@ export default class Application extends PureComponent {
                         setCountries={this.setCountries}
                       />
                       <CountryList list={this.state.initCountries} />
+                      <CountryCountAndRegion regions={this.state.regions} count={this.state.count} />
                     </div>
                 </div>
             </div>
@@ -74,5 +79,8 @@ export default class Application extends PureComponent {
 }
 
 if (document.getElementById('app')) {
-    ReactDOM.render(<Application />, document.getElementById('app'));
+    const app = document.getElementById('app');
+    const props = Object.assign({}, app.dataset)
+
+    ReactDOM.render(<Application {...props}/>, app);
 }

@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
+import { fromJS, List } from "immutable";
 
 export default function CountryList(props) {
 
+  const [countries, setCountries] = useState(new List());
 
   useEffect(() => {
-  }, []);
+    setCountries(props.list);
+  }, [props.list]);
 
   return (
     // add className='card-columns'
     <div>
         {
-          props.list.size ? props.list.map((ele) => {
+          countries.size > 0 ? countries.map((ele) => {
             return (
               <div className="card" key={ele.get('alpha3Code')}>
                 <div className="row">
@@ -32,13 +35,13 @@ export default function CountryList(props) {
                       </ul>
                       <ul className="list-group">
                         <li className="list-group-item">Languages</li>
-                        {ele.get('languages').map(language => {
+                        { ele.get('languages') ? ele.get('languages').map(language => {
                           return (
                             <li className="list-group-item" key={language.get('iso639_1')}>
                               {language.get('name')}
                             </li>
                           );
-                        })}
+                        }) : null }
                       </ul>
                     </div>
                   </div>

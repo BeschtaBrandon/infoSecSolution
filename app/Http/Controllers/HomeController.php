@@ -12,7 +12,19 @@ class HomeController extends Controller
 
     public function index() {
       $res = $this->apiClient->getCountries();
+      $regions = array_column($res, 'region');
+      $regions = array_values(array_unique($regions, SORT_REGULAR));
+      $filteredRegions = array_filter($regions, function($value) { return !is_null($value) && $value !== ''; });
 
-      return view('app', compact( 'res'));
+      $count = count($res);
+      return view('app', compact( 'count', 'filteredRegions'));
     }
+
+  private function getRegions($array)
+  {
+    if($array%2==0)
+      return TRUE;
+    else
+      return FALSE;
+  }
 }

@@ -38,6 +38,8 @@ class CountryApi extends BaseApi {
     return $this->getRequest($this->api_base . 'name/' . $name);
   }
 
-
+  public function getCountryByCode($code = '') {
+    return $this->getRequest($this->api_base . 'alpha/' . $code);
+  }
 
 }

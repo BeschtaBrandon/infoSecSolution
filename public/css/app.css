@@ -3,7 +3,15 @@
 }
 
 .container .form-inline .lead {
-  margin-left: 10px;
+  margin: 0px 10px 15px 10px;
+}
+
+.container .form-inline .btn-info {
+  margin-left: 5px;
+}
+
+.container .form-inline .btn-danger {
+  margin-left: 5px;
 }
 
 .container .card {

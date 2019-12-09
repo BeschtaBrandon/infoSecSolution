@@ -16,31 +16,38 @@ class ApiController {
   }
 
   /**
-   * Retrieve countries
+   * Retrieve all countries
    *
-   * @param \Request $request
    *
    * @return \Illuminate\Http\JsonResponse
    */
   public function getCountries() {
     $response = $this->apiClient->getCountries();
+    // Limit search to 50 results
     return response()->json(array_slice($response, 0, 50));
   }
 
   /**
-   * Retrieve countries
+   * Retrieve a country provided country name
    *
-   * @param \Request $request
+   * @param $name - The Country's name
    *
    * @return \Illuminate\Http\JsonResponse
    */
-//  public function searchCountries($name) {
-//    $response = $this->apiClient->postCountrySearch($name);
-//    return response()->json($response);
-//  }
-
   public function getCountryByName($name) {
     $response = $this->apiClient->getCountryByName($name);
+    return response()->json($response);
+  }
+
+  /**
+   * Retrieve a country provided country alpha2code or alpha3code
+   *
+   * @param $code - The Country's alpha code
+   *
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function getCountryByCode($code) {
+    $response = $this->apiClient->getCountryByCode($code);
     return response()->json($response);
   }
 }

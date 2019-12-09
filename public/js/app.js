@@ -59586,7 +59586,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! immutable */ "./node_modules/immutable/dist/immutable.es.js");
 /* harmony import */ var _CountryList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CountryList */ "./resources/js/components/CountryList.jsx");
 /* harmony import */ var _CountryForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CountryForm */ "./resources/js/components/CountryForm.jsx");
-/* harmony import */ var _helpers_api__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../helpers/api */ "./resources/js/helpers/api.js");
+/* harmony import */ var _CountryCountAndRegion__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./CountryCountAndRegion */ "./resources/js/components/CountryCountAndRegion.jsx");
+/* harmony import */ var _helpers_api__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../helpers/api */ "./resources/js/helpers/api.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -59614,6 +59615,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 var Application =
 /*#__PURE__*/
 function (_PureComponent) {
@@ -59628,7 +59630,8 @@ function (_PureComponent) {
 
     _defineProperty(_assertThisInitialized(_this), "setCountries", function (data) {
       _this.setState({
-        initCountries: data
+        initCountries: data,
+        count: data.size
       });
     });
 
@@ -59640,7 +59643,9 @@ function (_PureComponent) {
 
     _this.state = {
       initCountries: new immutable__WEBPACK_IMPORTED_MODULE_2__["List"](),
-      searchText: ''
+      searchText: '',
+      count: _this.props.countryCount,
+      regions: _this.props.countryRegions
     };
     return _this;
   }
@@ -59687,6 +59692,9 @@ function (_PureComponent) {
         setCountries: this.setCountries
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CountryList__WEBPACK_IMPORTED_MODULE_3__["default"], {
         list: this.state.initCountries
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CountryCountAndRegion__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        regions: this.state.regions,
+        count: this.state.count
       }))));
     }
   }]);
@@ -59697,7 +59705,35 @@ function (_PureComponent) {
 
 
 if (document.getElementById('app')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Application, null), document.getElementById('app'));
+  var app = document.getElementById('app');
+  var props = Object.assign({}, app.dataset);
+  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Application, props), app);
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/CountryCountAndRegion.jsx":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/CountryCountAndRegion.jsx ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CountryCountAndRegion; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+ // import {fromJS, toLists} from "immutable";
+
+function CountryCountAndRegion(_ref) {
+  var count = _ref.count,
+      regions = _ref.regions;
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "card"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "card-body"
+  }, "Total # of countries: ", count, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Regions include: ", regions));
 }
 
 /***/ }),
@@ -59719,19 +59755,11 @@ __webpack_require__.r(__webpack_exports__);
 
 function CountryForm(props) {
   var token = document.querySelector('meta[name="csrf-token"]').content;
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    console.log("props", props); // fetch('countryByName',{
-    //   method: 'GET',
-    //   mode: 'cors',
-    //   headers:{
-    //     "Content-Type": "application/json; charset=utf-8",
-    //     "X-CSRF-TOKEN": token
-    //   },
-    // });
-  }, []);
 
   var handleClick = function handleClick() {
-    fetch("countryByName/".concat(props.searchText), {
+    var searchTxt = props.searchText;
+    var url = searchTxt.length > 3 ? 'countryByName' : 'countryByCode';
+    fetch("".concat(url, "/").concat(searchTxt), {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -59741,7 +59769,7 @@ function CountryForm(props) {
     }).then(function (res) {
       return res.json();
     }).then(function (data) {
-      props.setCountries(Object(immutable__WEBPACK_IMPORTED_MODULE_1__["fromJS"])(data));
+      props.setCountries(url === 'countryByCode' ? Object(immutable__WEBPACK_IMPORTED_MODULE_1__["fromJS"])([data]) : Object(immutable__WEBPACK_IMPORTED_MODULE_1__["fromJS"])(data));
     }, // Note: it's important to handle errors here
     // instead of a catch() block so that we don't swallow
     // exceptions from actual bugs in components.
@@ -59775,7 +59803,7 @@ function CountryForm(props) {
     className: "form-inline"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "lead"
-  }, "Search by country name:"), '     ', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, "Search by country name or alpha code (2 or 3):"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group mb-3"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "text",
@@ -59810,11 +59838,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CountryList; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! immutable */ "./node_modules/immutable/dist/immutable.es.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 function CountryList(props) {
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {}, []);
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(new immutable__WEBPACK_IMPORTED_MODULE_1__["List"]()),
+      _useState2 = _slicedToArray(_useState, 2),
+      countries = _useState2[0],
+      setCountries = _useState2[1];
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    setCountries(props.list);
+  }, [props.list]);
   return (// add className='card-columns'
-    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, props.list.size ? props.list.map(function (ele) {
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, countries.size > 0 ? countries.map(function (ele) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card",
         key: ele.get('alpha3Code')
@@ -59840,12 +59885,12 @@ function CountryList(props) {
         className: "list-group"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
         className: "list-group-item"
-      }, "Languages"), ele.get('languages').map(function (language) {
+      }, "Languages"), ele.get('languages') ? ele.get('languages').map(function (language) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
           className: "list-group-item",
           key: language.get('iso639_1')
         }, language.get('name'));
-      })))))));
+      }) : null))))));
     }) : null)
   );
 }

@@ -14,5 +14,7 @@
 Route::get('/', 'HomeController@index');
 
 Route::get('countries', 'Api\ApiController@getCountries');
+// Route to search by country name
 Route::get('countryByName/{name}', 'Api\ApiController@getCountryByName');
-
+// Search by alpha code
+Route::get('countryByCode/{code}', 'Api\ApiController@getCountryByCode');
