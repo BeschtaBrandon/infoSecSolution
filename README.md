@@ -26,5 +26,5 @@ Install Laravel: (see docs on [installation](https://laravel.com/docs/6.x/instal
 1. From project's directory run `yarn install && yarn run dev`
 
 ### Demo
-[![alt text](./sample.png)]
+![Localhost:8000](./sample.png)
 
