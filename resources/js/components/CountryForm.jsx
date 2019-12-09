@@ -62,7 +62,7 @@ export default function CountryForm(props) {
           <input type="text" className="form-control" name="countryName" value={props.searchText} onChange={e => props.handleTextChange(e)}/>
         </div>
         <button type="button" className="btn btn-info mb-3" onClick={handleClick}>Search</button>
-        <button type="button" className="btn btn-danger mb-3" onClick={handleReset}>Clear</button>
+        <button type="button" className="btn btn-danger mb-3" onClick={handleReset}>Reset</button>
       </form>
     </div>
   );
